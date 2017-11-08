@@ -31,32 +31,18 @@ int main(int argc, char* argv[])
 
       for (int j=0; j < strlen(argv[i]) ; j++)
       {
-         //cout << "Char: " << argv[i][j] << " " << int(argv[i][j]) << endl;
-         //cout << "Char: " << argv[i][j] << " is " << argv[i][j] - 'a' << endl;
          count[argv[i][j] - 'a']++;
-         //count[int(argv[i][j]) - int('a')]++;
       }
 
       for (int j=0; j < strlen(argv[i]) ; j++)
       {
          cout << "Count of Char: " << argv[i][j] << " is " << count[argv[i][j] - 'a'] << endl;
-         //cout << "Count of Char: " << argv[i][j] << " is " << count[int(argv[i][j]) - int('a')] << endl;
       }
 
-      // Reset count arrat
+      // Reset count array
       memset (count, 0, sizeof(count));
       
    }
-
-   /*
-   for (int i=1; i < argc; i++)
-   {
-      for (int j=0; j < strlen(argv[1]) ; j++)
-      {
-         cout << "Char: " << argv[i][j] << " is " << count[int(argv[i][j]) - int('a')] << endl;
-      }
-   }
-   */
 
    return 0;
 }
