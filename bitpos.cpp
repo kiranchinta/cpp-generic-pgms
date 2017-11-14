@@ -12,7 +12,7 @@ int main(int argc, char** argv)
    {
       cout << "Incorrect number of arguments" << endl;
       cout << "Given a number(less than 9223372036854775808), outputs the bit position(s) set in binary format for that decimal number" << endl;
-      cout << "Usage: ./" << argv[0] << " DecimalNumber" << endl;
+      cout << "Usage: " << argv[0] << " DecimalNumber" << endl;
 
       return 0;
    }
