@@ -50,23 +50,3 @@ Value: 1024
 Value: 4294967298
 
 ================================================================================================
-alphacount.cpp 
-
-Prints frequency of the characters in the string
-
-$ ./alphacount helloworld
-String input: helloworld length: 10
-
-For String helloworld
-Count of Char: h is 1
-Count of Char: e is 1
-Count of Char: l is 3
-Count of Char: l is 3
-Count of Char: o is 2
-Count of Char: w is 1
-Count of Char: o is 2
-Count of Char: r is 1
-Count of Char: l is 3
-Count of Char: d is 1
-
-================================================================================================
