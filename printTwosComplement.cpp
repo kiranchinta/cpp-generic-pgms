@@ -49,4 +49,7 @@ int main(int argc, char** argv)
    cout << "Input (decimal): " << *posnum << endl;
    cout << "Positve integer value:  " << std::bitset<32>(*posnum) << endl;
    cout << "Negetive integer value: " << std::bitset<32>(*negnum) << endl;
+
+   delete posnum;
+   delete negnum;
 }

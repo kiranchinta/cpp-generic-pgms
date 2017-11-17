@@ -13,11 +13,16 @@ int main(int argc, char** argv)
    }
 
    unsigned long long sumNum = 0;
+   unsigned long long diffNum = 0;
+   unsigned long long val = 0;
 
    for (int i=1; i < argc; i++)
    {
-      sumNum += 0x1ULL<<atoi(argv[i]);
+      val = atoi(argv[i]);
+      sumNum += 0x1ULL<<val;
    }
 
-   cout << "Value: " << sumNum << endl;
+   cout << endl;
+   cout << "Bitset after setting those bit positions: \n" << std::bitset<64>(sumNum) << endl;
+   cout << "Decimal: " << sumNum << endl;
 }
