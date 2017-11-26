@@ -1,10 +1,10 @@
-# SRCS=bitpostodec.cpp bitpos.cpp powerof2.cpp printTwosComplement.cpp
+# SRCS=bitpostodec.cpp bitpos.cpp powerof2.cpp printTwosComplement.cpp sort.cpp
 # Replace .cpp in SRCS with .o
 # OBJS=$(subst .cpp,.o,$(SRCS))
 
 CXX=g++
 
-binaries = bitpostodec bitpos powerof2 printTwosComplement
+binaries = bitpostodec bitpos powerof2 printTwosComplement sort
 all: $(binaries)
 
 bitpostodec: bitpostodec.cpp 
@@ -18,6 +18,10 @@ powerof2: powerof2.cpp
 
 printTwosComplement: printTwosComplement.cpp
 	$(CXX) -o printTwosComplement printTwosComplement.cpp
+
+# Extra compile options to get the symbol info for stacktrace dumping
+sort: sort.cpp
+	$(CXX) -g -rdynamic -o sort sort.cpp
 
 clean:
 	rm $(binaries)
