@@ -288,6 +288,52 @@ void mergeSort(std::vector<int> &mergeVec)
 #endif
 }
 
+// 
+void AiHaSort(std::vector<int> &AiHaSortVec)
+{
+   int max = 0;
+
+   // TODO: Improvement: You can also gather the min and only allocate a vector
+   // of pairs of the size of (max - min). This way if the min and max are far
+   // apart, we can save ourself from the unnecessary vector allocation.  Find
+   //
+   // Find the max
+   for (int i=0; i < AiHaSortVec.size() - 1; i++)
+   {
+      if (AiHaSortVec[i] > max)
+      {
+         max = AiHaSortVec[i];
+      }
+   }
+
+   // Initialize all to false.
+   std::vector<std::pair <bool, int> > valExists(max+1, std::make_pair(false,0));
+
+   for (int i=0; i <= AiHaSortVec.size() - 1; i++)
+   {
+      valExists[AiHaSortVec[i]].first = true;
+      // Keep a count of duplicates
+      valExists[AiHaSortVec[i]].second++;
+   }
+
+   for (int i=0, j =0; i <= max; i++)
+   {
+      if (valExists[i].first == true)
+      {
+         AiHaSortVec[j] = i;
+         j++;
+         if (valExists[i].second > 1)
+         {
+            for (int k=0; k < valExists[i].second -1; k++)
+            {
+               AiHaSortVec[j] = i;
+               j++;
+            }
+         }
+      }
+   }
+}
+
 int main(int argc, char* argv[])
 {
    bool testStatus = true;
@@ -445,6 +491,21 @@ int main(int argc, char* argv[])
    // Counting sort
 
    // Timsort
+   
+   // My own sorting algorithm (Name pronounced aiha sort)
+   std::vector<int> AiHaSortVector(inList);
+   timeStart = clock();
+   AiHaSort(AiHaSortVector);
+   timeEnd = clock();
+   cout << "\nTime taken by KiranChinta Sort: " << timeEnd - timeStart << " clicks,  " << (timeEnd - timeStart)*1.0/CLOCKS_PER_SEC << " seconds" << endl;
+   if (!testSort(stdsortVector,AiHaSortVector))
+   {
+      cout << "\nMy Sort sorted incorrectly" << endl;
+#ifdef PGM_DEBUG
+      printVectorElements(AiHaSortVector);
+#endif
+      testStatus = false;
+   }
 
    // Print the test outcome
    std::string str(testStatus?"Passed":"Failed" );
