@@ -12,6 +12,7 @@
 #include <unistd.h> // For STDERR_FILENO
 #include <time.h> // For clock
 #include <fstream>      // std::ifstream
+#include <valarray>     // std::valarray
 
 using namespace std;
 
@@ -288,14 +289,28 @@ void mergeSort(std::vector<int> &mergeVec)
 #endif
 }
 
-// 
+// AiHa sort (pronounced Aye-ha): Allocate a temporary structure from 0 to max
+// value in the input list. Walking from first element in the input list to
+// last element in the input list, increment the corresponding index counter
+// for each value in the input list. Next, go through this temporary structure
+// from 0th index to the max index, then write that index value into the output
+// array the number of times tracked by the counter.
+//
+// My own sorting algorithm, AiHa sort (pronounced Aye-ha)
+// Characteristics: 
+//   [a] Non comparison sort
+//   [b] Not a stable sort since the relative ordering of duplicate elements
+//       is not preserved.
+//   [c] Not an in-place sort as it uses additional vector to store meta data
+//   [d] Time complexity is O(n) , max runtime is 3n + time for memory allocations for the temporary vector.
+//   [e] A counting sort that is suited for an array of integer numbers.
 void AiHaSort(std::vector<int> &AiHaSortVec)
 {
    int max = 0;
 
    // TODO: Improvement: You can also gather the min and only allocate a vector
    // of pairs of the size of (max - min). This way if the min and max are far
-   // apart, we can save ourself from the unnecessary vector allocation.  Find
+   // apart, we can save ourself from the unnecessary long vector allocation.
    //
    // Find the max
    for (int i=0; i < AiHaSortVec.size() - 1; i++)
@@ -307,29 +322,36 @@ void AiHaSort(std::vector<int> &AiHaSortVec)
    }
 
    // Initialize all to false.
-   std::vector<std::pair <bool, int> > valExists(max+1, std::make_pair(false,0));
+   //
+   // After testing with std::vector and std:valarray, performance seems to be
+   // better when valarray is used. Reading on the web, valarray seems to be
+   // intended for optimized performance for some vectorized processing of
+   // arrays (like done in FORTRAN) which never happened.
+   //
+   // std::vector<int> valExists(max+1, 0);
+   //
+   // valarray constructor takes in arguments in a different order compared to
+   // std::vector, bit odd.
+   // valarray (const T& val, size_t n);
+   std::valarray<int> valExists(0, max+1);
+
+   // Test performance using dynarray, the memory
+   // http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3662.html
+   // std::dynarray<int> valExists(max+1, 0);
 
    for (int i=0; i <= AiHaSortVec.size() - 1; i++)
    {
-      valExists[AiHaSortVec[i]].first = true;
+      //valExists[AiHaSortVec[i]].first = true;
       // Keep a count of duplicates
-      valExists[AiHaSortVec[i]].second++;
+      valExists[AiHaSortVec[i]]++;
    }
 
    for (int i=0, j =0; i <= max; i++)
    {
-      if (valExists[i].first == true)
+      for (int k=0; k < valExists[i]; k++)
       {
          AiHaSortVec[j] = i;
          j++;
-         if (valExists[i].second > 1)
-         {
-            for (int k=0; k < valExists[i].second -1; k++)
-            {
-               AiHaSortVec[j] = i;
-               j++;
-            }
-         }
       }
    }
 }
@@ -492,12 +514,19 @@ int main(int argc, char* argv[])
 
    // Timsort
    
-   // My own sorting algorithm (Name pronounced aiha sort)
+   // My own sorting algorithm, AiHa sort (pronounced Aye-ha)
+   // Characteristics: 
+   //   [a] Non comparison sort
+   //   [b] Not a stable sort since the relative ordering of duplicate elements
+   //       is not preserved.
+   //   [c] Not an in-place sort as it uses additional vector to store meta data
+   //   [d] Time complexity is O(n) , max runtime is 3n + time for memory allocations for the temporary vector.
+   //   [e] A counting sort that is suited for an array of integer numbers.
    std::vector<int> AiHaSortVector(inList);
    timeStart = clock();
    AiHaSort(AiHaSortVector);
    timeEnd = clock();
-   cout << "\nTime taken by KiranChinta Sort: " << timeEnd - timeStart << " clicks,  " << (timeEnd - timeStart)*1.0/CLOCKS_PER_SEC << " seconds" << endl;
+   cout << "\nTime taken by KiranChinta(AiHa) Sort: " << timeEnd - timeStart << " clicks,  " << (timeEnd - timeStart)*1.0/CLOCKS_PER_SEC << " seconds" << endl;
    if (!testSort(stdsortVector,AiHaSortVector))
    {
       cout << "\nMy Sort sorted incorrectly" << endl;

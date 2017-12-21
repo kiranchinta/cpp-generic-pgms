@@ -20,6 +20,7 @@ printTwosComplement: printTwosComplement.cpp
 	$(CXX) -o printTwosComplement printTwosComplement.cpp
 
 # Extra compile options to get the symbol info for stacktrace dumping
+# $(CXX) -g -std=c++1y -rdynamic -o sort sort.cpp // For dynarray compilation
 sort: sort.cpp
 	$(CXX) -g -rdynamic -o sort sort.cpp
 

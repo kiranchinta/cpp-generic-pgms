@@ -1,0 +1,118 @@
+~/Documents/YOU/mycpp_git/cpp-generic-pgms  12/09/2017-Sat-Dec-06:53:42
+$ ./sort sortData/intnum_10000
+clocks ticks per second: 1000000
+
+Time taken by std::sort: 22 clicks,  2.2e-05 seconds
+
+Time taken by Bubble Sort: 462757 clicks,  0.462757 seconds
+
+Time taken by Selection Sort: 203691 clicks,  0.203691 seconds
+
+Time taken by Insertion Sort: 459479 clicks,  0.459479 seconds
+
+Time taken by Quick Sort: 498 clicks,  0.000498 seconds
+
+Time taken by Merge Sort: 1255 clicks,  0.001255 seconds
+
+Time taken by KiranChinta(AiHa) Sort: 285 clicks,  0.000285 seconds
+
+
+ Test Passed
+
+~/Documents/YOU/mycpp_git/cpp-generic-pgms  12/09/2017-Sat-Dec-06:53:42
+$ ./sort sortData/intnum_100T
+clocks ticks per second: 1000000
+
+Time taken by std::sort: 173 clicks,  0.000173 seconds
+
+Time taken by Bubble Sort: 47231851 clicks,  47.2319 seconds
+
+Time taken by Selection Sort: 19331879 clicks,  19.3319 seconds
+
+Time taken by Insertion Sort: 42439821 clicks,  42.4398 seconds
+
+Time taken by Quick Sort: 4920 clicks,  0.00492 seconds
+
+Time taken by Merge Sort: 14360 clicks,  0.01436 seconds
+
+Time taken by KiranChinta(AiHa) Sort: 2535 clicks,  0.002535 seconds
+
+
+ Test Passed
+
+~/Documents/YOU/mycpp_git/cpp-generic-pgms  12/09/2017-Sat-Dec-06:53:42
+$ ./sort sortData/intnum_rand_100T 
+clocks ticks per second: 1000000
+
+Time taken by std::sort: 2146 clicks,  0.002146 seconds
+ 
+Time taken by Bubble Sort: 51189739 clicks,  51.1897 seconds
+
+Time taken by Selection Sort: 19700900 clicks,  19.7009 seconds
+
+Time taken by Insertion Sort: 30508447 clicks,  30.5084 seconds
+
+Time taken by Quick Sort: 11622 clicks,  0.011622 seconds
+
+Time taken by Merge Sort: 20683 clicks,  0.020683 seconds
+
+Time taken by KiranChinta(AiHa) Sort: 1536 clicks,  0.001536 seconds
+
+
+ Test Passed
+
+
+~/Documents/YOU/mycpp_git/cpp-generic-pgms  12/09/2017-Sat-Dec-06:53:42
+$ ./sort sortData/intnum_rand_1M
+clocks ticks per second: 1000000
+
+Time taken by std::sort: 63305 clicks,  0.063305 seconds
+
+Time taken by Merge Sort: 332076 clicks,  0.332076 seconds
+
+Time taken by KiranChinta(AiHa) Sort: 57634 clicks,  0.057634 seconds
+
+
+// With valarray in AiHa sort
+~/Documents/YOU/mycpp_git/cpp-generic-pgms  12/09/2017-Sat-Dec-06:53:42
+$ ./sort sortData/intnum_rand_100T 
+clocks ticks per second: 1000000
+
+Time taken by std::sort: 2516 clicks,  0.002516 seconds
+
+Time taken by Bubble Sort: 52962190 clicks,  52.9622 seconds
+
+Time taken by Selection Sort: 19703290 clicks,  19.7033 seconds
+
+Time taken by Insertion Sort: 30244813 clicks,  30.2448 seconds
+
+Time taken by Quick Sort: 12085 clicks,  0.012085 seconds
+
+Time taken by Merge Sort: 23420 clicks,  0.02342 seconds
+
+Time taken by KiranChinta(AiHa) Sort: 1137 clicks,  0.001137 seconds
+
+
+ Test Passed
+
+~/Documents/YOU/mycpp_git/cpp-generic-pgms  12/09/2017-Sat-Dec-06:53:42
+$ ./sort sortData/intnum_rand_1M
+clocks ticks per second: 1000000
+
+Time taken by std::sort: 64141 clicks,  0.064141 seconds
+
+Time taken by Merge Sort: 307111 clicks,  0.307111 seconds
+
+Time taken by KiranChinta(AiHa) Sort: 34949 clicks,  0.034949 seconds
+
+
+$ ./sort sortData/intnum_mil 
+clocks ticks per second: 1000000
+
+Time taken by std::sort: 2056 clicks,  0.002056 seconds
+
+Time taken by Merge Sort: 183325 clicks,  0.183325 seconds
+
+Time taken by KiranChinta(AiHa) Sort: 24420 clicks,  0.02442 seconds
+
+
