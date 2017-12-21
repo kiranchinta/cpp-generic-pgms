@@ -526,7 +526,7 @@ int main(int argc, char* argv[])
    timeStart = clock();
    AiHaSort(AiHaSortVector);
    timeEnd = clock();
-   cout << "\nTime taken by KiranChinta(AiHa) Sort: " << timeEnd - timeStart << " clicks,  " << (timeEnd - timeStart)*1.0/CLOCKS_PER_SEC << " seconds" << endl;
+   cout << "\nTime taken by AiHa Sort: " << timeEnd - timeStart << " clicks,  " << (timeEnd - timeStart)*1.0/CLOCKS_PER_SEC << " seconds" << endl;
    if (!testSort(stdsortVector,AiHaSortVector))
    {
       cout << "\nMy Sort sorted incorrectly" << endl;
