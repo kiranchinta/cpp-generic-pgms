@@ -19,27 +19,31 @@ Time taken by KiranChinta(AiHa) Sort: 285 clicks,  0.000285 seconds
 
  Test Passed
 
-~/Documents/YOU/mycpp_git/cpp-generic-pgms  12/09/2017-Sat-Dec-06:53:42
+~/Documents/YOU/mycpp_git/cpp-generic-pgms  12/15/2017-Fri-Dec-17:10:20
 $ ./sort sortData/intnum_100T
 clocks ticks per second: 1000000
 
-Time taken by std::sort: 173 clicks,  0.000173 seconds
+Time taken by std::sort: 164 clicks,  0.000164 seconds
 
-Time taken by Bubble Sort: 47231851 clicks,  47.2319 seconds
+Time taken by AiHa Sort: 2121 clicks,  0.002121 seconds
 
-Time taken by Selection Sort: 19331879 clicks,  19.3319 seconds
+Time taken by Radix Sort: 23445 clicks,  0.023445 seconds
 
-Time taken by Insertion Sort: 42439821 clicks,  42.4398 seconds
+Time taken by Merge Sort: 14439 clicks,  0.014439 seconds
 
-Time taken by Quick Sort: 4920 clicks,  0.00492 seconds
+Time taken by Quick Sort: 5644 clicks,  0.005644 seconds
 
-Time taken by Merge Sort: 14360 clicks,  0.01436 seconds
+Time taken by Insertion Sort: 40156635 clicks,  40.1566 seconds
 
-Time taken by KiranChinta(AiHa) Sort: 2535 clicks,  0.002535 seconds
+Time taken by Selection Sort: 18349848 clicks,  18.3498 seconds
+
+Time taken by Bubble Sort: 44321502 clicks,  44.3215 seconds
 
 
  Test Passed
 
+
+// Without valarray in AiHa sort
 ~/Documents/YOU/mycpp_git/cpp-generic-pgms  12/09/2017-Sat-Dec-06:53:42
 $ ./sort sortData/intnum_rand_100T 
 clocks ticks per second: 1000000
@@ -74,26 +78,29 @@ Time taken by KiranChinta(AiHa) Sort: 57634 clicks,  0.057634 seconds
 
 
 // With valarray in AiHa sort
-~/Documents/YOU/mycpp_git/cpp-generic-pgms  12/09/2017-Sat-Dec-06:53:42
-$ ./sort sortData/intnum_rand_100T 
+~/Documents/YOU/mycpp_git/cpp-generic-pgms  12/15/2017-Fri-Dec-17:10:20
+$ ./sort sortData/intnum_rand_100T
 clocks ticks per second: 1000000
 
-Time taken by std::sort: 2516 clicks,  0.002516 seconds
+Time taken by std::sort: 3390 clicks,  0.00339 seconds
 
-Time taken by Bubble Sort: 52962190 clicks,  52.9622 seconds
+Time taken by AiHa Sort: 1540 clicks,  0.00154 seconds
 
-Time taken by Selection Sort: 19703290 clicks,  19.7033 seconds
+Time taken by Radix Sort: 12285 clicks,  0.012285 seconds
 
-Time taken by Insertion Sort: 30244813 clicks,  30.2448 seconds
+Time taken by Merge Sort: 22909 clicks,  0.022909 seconds
 
-Time taken by Quick Sort: 12085 clicks,  0.012085 seconds
+Time taken by Quick Sort: 10919 clicks,  0.010919 seconds
 
-Time taken by Merge Sort: 23420 clicks,  0.02342 seconds
+Time taken by Insertion Sort: 28063221 clicks,  28.0632 seconds
 
-Time taken by KiranChinta(AiHa) Sort: 1137 clicks,  0.001137 seconds
+Time taken by Selection Sort: 17978158 clicks,  17.9782 seconds
+
+Time taken by Bubble Sort: 47817947 clicks,  47.8179 seconds
 
 
  Test Passed
+
 
 ~/Documents/YOU/mycpp_git/cpp-generic-pgms  12/09/2017-Sat-Dec-06:53:42
 $ ./sort sortData/intnum_rand_1M

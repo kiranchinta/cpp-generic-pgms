@@ -289,6 +289,75 @@ void mergeSort(std::vector<int> &mergeVec)
 #endif
 }
 
+void radixSort(std::vector<int> &radixSortVec) 
+{
+   int max = 0;
+   int inputSize = radixSortVec.size();
+
+   // Find the max
+   for (int i=0; i < inputSize; i++)
+   {
+      if (radixSortVec[i] > max)
+      {
+         max = radixSortVec[i];
+      }
+   }
+
+   int digitPos = 1;
+   std::vector<int> tempVec(inputSize, 0);
+
+   // If the max number consists of 'k' digits then we will have to make 'k'
+   // passes through all the numbers and 'k' sorts
+   while ( max/digitPos > 0 )
+   {
+      int alphabetCount[10] = {0};
+
+      // Calculate the histogram of key frequencies in the respective digitPos
+      // location
+      for (int i=0; i < inputSize; i++)
+      {
+         alphabetCount[(radixSortVec[i]/digitPos) % 10]++;
+      }
+
+      // Calculate the starting index for each key
+      for (int i=1; i < 10; i++)
+      {
+         alphabetCount[i] += alphabetCount[i-1];
+      }
+
+      // Copy the integer to temp array, preserving order of inputs with equal
+      // values
+      for (int i = inputSize -1; i >= 0; i--)
+      {
+         // Index is 0 based, count is 1 based
+         alphabetCount[(radixSortVec[i]/digitPos) % 10]--;
+         tempVec[alphabetCount[(radixSortVec[i]/digitPos) % 10]] = radixSortVec[i];
+
+#ifdef PGM_DEBUG_DETAILED
+         cout << "Iterating in For Loop\n" ;
+         printVectorElements(tempVec);
+#endif
+      }
+
+#ifdef PGM_DEBUG_DETAILED
+      cout << "Out of For Loop\n" ;
+#endif
+
+      // Copy the tempVec to input Vec
+      for (int i = 0; i < inputSize; i++)
+      {
+         radixSortVec[i] = tempVec[i];
+      }
+
+#ifdef PGM_DEBUG_DETAILED
+    cout << "Iterating in While Loop\n" ;
+    printVectorElements(radixSortVec);
+#endif
+
+      digitPos *= 10;
+   }
+}
+
 // AiHa sort (pronounced Aye-ha): Allocate a temporary structure from 0 to max
 // value in the input list. Walking from first element in the input list to
 // last element in the input list, increment the corresponding index counter
@@ -313,7 +382,7 @@ void AiHaSort(std::vector<int> &AiHaSortVec)
    // apart, we can save ourself from the unnecessary long vector allocation.
    //
    // Find the max
-   for (int i=0; i < AiHaSortVec.size() - 1; i++)
+   for (int i=0; i < AiHaSortVec.size(); i++)
    {
       if (AiHaSortVec[i] > max)
       {
@@ -417,9 +486,9 @@ int main(int argc, char* argv[])
    printVectorElements(inList);
 #endif
 
-   // Let's sort using std::sort to test our sorting output.
-   // First copy the inList array to a stdsortVector since std::sort sorts the
-   // elements inline
+   // Let's sort using std::sort to later test our sorting output.  First copy
+   // the inList array to a stdsortVector since std::sort sorts the elements
+   // inline
    std::vector<int> stdsortVector(inList);
    cout << "clocks ticks per second: " << CLOCKS_PER_SEC << endl;
    timeStart = clock();
@@ -431,62 +500,39 @@ int main(int argc, char* argv[])
    printVectorElements(stdsortVector);
 #endif
 
-   // Bubble sort
-   std::vector<int> bubbleVector(inList);
+   // My own sorting algorithm, AiHa sort (pronounced Aye-ha)
+   // Characteristics: 
+   //   [a] Non comparison sort
+   //   [b] Not a stable sort since the relative ordering of duplicate elements
+   //       is not preserved.
+   //   [c] Not an in-place sort as it uses additional vector to store meta data
+   //   [d] Time complexity is O(n) , max runtime is 3n + time for memory allocations for the temporary vector.
+   //   [e] A counting sort that is suited for an array of integer numbers.
+   std::vector<int> AiHaSortVector(inList);
    timeStart = clock();
-   bubbleSort(bubbleVector);
+   AiHaSort(AiHaSortVector);
    timeEnd = clock();
-   cout << "\nTime taken by Bubble Sort: " << timeEnd - timeStart << " clicks,  " << (timeEnd - timeStart)*1.0/CLOCKS_PER_SEC << " seconds" << endl;
-   if (!testSort(stdsortVector,bubbleVector))
+   cout << "\nTime taken by AiHa Sort: " << timeEnd - timeStart << " clicks,  " << (timeEnd - timeStart)*1.0/CLOCKS_PER_SEC << " seconds" << endl;
+   if (!testSort(stdsortVector,AiHaSortVector))
    {
-      cout << "\nBubble Sort sorted incorrectly" << endl;
+      cout << "\nAiHa Sort sorted incorrectly" << endl;
 #ifdef PGM_DEBUG
-      printVectorElements(bubbleVector);
+      printVectorElements(AiHaSortVector);
 #endif
       testStatus = false;
    }
 
-   // Selection sort
-   std::vector<int> selectionVector(inList);
+   // Radix sort
+   std::vector<int> radixVector(inList);
    timeStart = clock();
-   selectionSort(selectionVector);
+   radixSort(radixVector);
    timeEnd = clock();
-   cout << "\nTime taken by Selection Sort: " << timeEnd - timeStart << " clicks,  " << (timeEnd - timeStart)*1.0/CLOCKS_PER_SEC << " seconds" << endl;
-   if (!testSort(stdsortVector,selectionVector))
+   cout << "\nTime taken by Radix Sort: " << timeEnd - timeStart << " clicks,  " << (timeEnd - timeStart)*1.0/CLOCKS_PER_SEC << " seconds" << endl;
+   if (!testSort(stdsortVector,radixVector))
    {
-      cout << "\nSelection Sort sorted incorrectly" << endl;
+      cout << "\nRadix Sort sorted incorrectly" << endl;
 #ifdef PGM_DEBUG
-      printVectorElements(selectionVector);
-#endif
-      testStatus = false;
-   }
-
-   // Insertion sort
-   std::vector<int> insVector(inList);
-   timeStart = clock();
-   insertionSort(insVector);
-   timeEnd = clock();
-   cout << "\nTime taken by Insertion Sort: " << timeEnd - timeStart << " clicks,  " << (timeEnd - timeStart)*1.0/CLOCKS_PER_SEC << " seconds" << endl;
-   if (!testSort(stdsortVector,insVector))
-   {
-      cout << "\nInsertion Sort sorted incorrectly" << endl;
-#ifdef PGM_DEBUG
-      printVectorElements(insVector);
-#endif
-      testStatus = false;
-   }
-
-   // Quick sort
-   std::vector<int> quickVector(inList);
-   timeStart = clock();
-   quickSort(quickVector, 0, quickVector.size()-1);
-   timeEnd = clock();
-   cout << "\nTime taken by Quick Sort: " << timeEnd - timeStart << " clicks,  " << (timeEnd - timeStart)*1.0/CLOCKS_PER_SEC << " seconds" << endl;
-   if (!testSort(stdsortVector,quickVector))
-   {
-      cout << "\nQuick Sort sorted incorrectly" << endl;
-#ifdef PGM_DEBUG
-      printVectorElements(quickVector);
+      printVectorElements(radixVector);
 #endif
       testStatus = false;
    }
@@ -506,35 +552,72 @@ int main(int argc, char* argv[])
       testStatus = false;
    }
 
-   // Radix sort
+   // Quick sort
+   std::vector<int> quickVector(inList);
+   timeStart = clock();
+   quickSort(quickVector, 0, quickVector.size()-1);
+   timeEnd = clock();
+   cout << "\nTime taken by Quick Sort: " << timeEnd - timeStart << " clicks,  " << (timeEnd - timeStart)*1.0/CLOCKS_PER_SEC << " seconds" << endl;
+   if (!testSort(stdsortVector,quickVector))
+   {
+      cout << "\nQuick Sort sorted incorrectly" << endl;
+#ifdef PGM_DEBUG
+      printVectorElements(quickVector);
+#endif
+      testStatus = false;
+   }
+
+   // Insertion sort
+   std::vector<int> insVector(inList);
+   timeStart = clock();
+   insertionSort(insVector);
+   timeEnd = clock();
+   cout << "\nTime taken by Insertion Sort: " << timeEnd - timeStart << " clicks,  " << (timeEnd - timeStart)*1.0/CLOCKS_PER_SEC << " seconds" << endl;
+   if (!testSort(stdsortVector,insVector))
+   {
+      cout << "\nInsertion Sort sorted incorrectly" << endl;
+#ifdef PGM_DEBUG
+      printVectorElements(insVector);
+#endif
+      testStatus = false;
+   }
+
+   // Selection sort
+   std::vector<int> selectionVector(inList);
+   timeStart = clock();
+   selectionSort(selectionVector);
+   timeEnd = clock();
+   cout << "\nTime taken by Selection Sort: " << timeEnd - timeStart << " clicks,  " << (timeEnd - timeStart)*1.0/CLOCKS_PER_SEC << " seconds" << endl;
+   if (!testSort(stdsortVector,selectionVector))
+   {
+      cout << "\nSelection Sort sorted incorrectly" << endl;
+#ifdef PGM_DEBUG
+      printVectorElements(selectionVector);
+#endif
+      testStatus = false;
+   }
+
+   // Bubble sort
+   std::vector<int> bubbleVector(inList);
+   timeStart = clock();
+   bubbleSort(bubbleVector);
+   timeEnd = clock();
+   cout << "\nTime taken by Bubble Sort: " << timeEnd - timeStart << " clicks,  " << (timeEnd - timeStart)*1.0/CLOCKS_PER_SEC << " seconds" << endl;
+   if (!testSort(stdsortVector,bubbleVector))
+   {
+      cout << "\nBubble Sort sorted incorrectly" << endl;
+#ifdef PGM_DEBUG
+      printVectorElements(bubbleVector);
+#endif
+      testStatus = false;
+   }
+
 
    // Heap sort
 
    // Counting sort
 
    // Timsort
-   
-   // My own sorting algorithm, AiHa sort (pronounced Aye-ha)
-   // Characteristics: 
-   //   [a] Non comparison sort
-   //   [b] Not a stable sort since the relative ordering of duplicate elements
-   //       is not preserved.
-   //   [c] Not an in-place sort as it uses additional vector to store meta data
-   //   [d] Time complexity is O(n) , max runtime is 3n + time for memory allocations for the temporary vector.
-   //   [e] A counting sort that is suited for an array of integer numbers.
-   std::vector<int> AiHaSortVector(inList);
-   timeStart = clock();
-   AiHaSort(AiHaSortVector);
-   timeEnd = clock();
-   cout << "\nTime taken by AiHa Sort: " << timeEnd - timeStart << " clicks,  " << (timeEnd - timeStart)*1.0/CLOCKS_PER_SEC << " seconds" << endl;
-   if (!testSort(stdsortVector,AiHaSortVector))
-   {
-      cout << "\nMy Sort sorted incorrectly" << endl;
-#ifdef PGM_DEBUG
-      printVectorElements(AiHaSortVector);
-#endif
-      testStatus = false;
-   }
 
    // Print the test outcome
    std::string str(testStatus?"Passed":"Failed" );
