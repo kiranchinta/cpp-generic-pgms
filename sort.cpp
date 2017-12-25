@@ -77,216 +77,71 @@ bool testSort(std::vector<int> const &vec1, std::vector<int> const &vec2)
    return resMatch;
 }
 
-// Bubble sort: Start at the beginning of the array, compare the first two
-// elements and swap based on the comparison performed. Then move to the next
-// pair of elements, compare and swap as necessary. Continue doing this until
-// the entire array is sorted. 
-// Runtime: O(n^2).
-void bubbleSort(std::vector<int> &bubVec)
+// AiHa sort (pronounced Aye-ha): Allocate a temporary structure from 0 to max
+// value in the input list. Walking from first element in the input list to
+// last element in the input list, increment the corresponding index counter
+// for each value in the input list. Next, go through this temporary structure
+// from 0th index to the max index, then write that index value into the output
+// array the number of times tracked by the counter.
+//
+// My own sorting algorithm, AiHa sort (pronounced Aye-ha)
+// Characteristics: 
+//   [a] Non comparison sort
+//   [b] Not a stable sort since the relative ordering of duplicate elements
+//       is not preserved.
+//   [c] Not an in-place sort as it uses additional vector to store meta data
+//   [d] Time complexity is O(n) , max runtime is 3n + time for memory allocations for the temporary vector.
+//   [e] A counting sort that is suited for an array of integer numbers.
+void AiHaSort(std::vector<int> &AiHaSortVec)
 {
+   int max = 0;
 
-#ifdef PGM_DEBUG_DETAILED
-   cout << "\nIn Bubble sort: " << endl;
-   printVectorElements(bubVec);
-#endif
-
-   for (int i=0; i < bubVec.size(); i++)
+   // TODO: Improvement: You can also gather the min and only allocate a vector
+   // of pairs of the size of (max - min). This way if the min and max are far
+   // apart, we can save ourself from the unnecessary long vector allocation.
+   //
+   // Find the max
+   for (int i=0; i < AiHaSortVec.size(); i++)
    {
-      for (int j=1; j < bubVec.size() - i; j++)
+      if (AiHaSortVec[i] > max)
       {
-         if (bubVec[j-1] > bubVec[j])
-         {
-            std::swap(bubVec[j-1], bubVec[j]);
-         }
+         max = AiHaSortVec[i];
       }
    }
 
-#ifdef PGM_DEBUG_DETAILED
-    printVectorElements(bubVec);
-#endif
-}
+   // Initialize all to false.
+   //
+   // After testing with std::vector and std:valarray, performance seems to be
+   // better when valarray is used. Reading on the web, valarray seems to be
+   // intended for optimized performance for some vectorized processing of
+   // arrays (like done in FORTRAN) which never happened.
+   //
+   // std::vector<int> valExists(max+1, 0);
+   //
+   // valarray constructor takes in arguments in a different order compared to
+   // std::vector, bit odd.
+   // valarray (const T& val, size_t n);
+   std::valarray<int> valExists(0, max+1);
 
-// Selection sort: Find the smallest element using a linear scan and move it to
-// the front. Then find the second smallest and move to the second position.
-// Continue doing this until the entire list is sorted.
-// Runtime: O(n^2).
-void selectionSort(std::vector<int> &selVec)
-{
-   int min;
-   int minPos;
+   // Test performance using dynarray, the memory
+   // http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3662.html
+   // std::dynarray<int> valExists(max+1, 0);
 
-   for (int i=0; i < selVec.size(); i++)
+   for (int i=0; i <= AiHaSortVec.size() - 1; i++)
    {
-      min = selVec[i];
-      minPos = i;
-
-      for (int j=i+1; j < selVec.size(); j++)
-      {
-         if (selVec[minPos]  > selVec[j])
-         {
-            minPos = j;
-         }
-      }
-
-      std::swap(selVec[i], selVec[minPos]);
+      //valExists[AiHaSortVec[i]].first = true;
+      // Keep a count of duplicates
+      valExists[AiHaSortVec[i]]++;
    }
 
-#ifdef PGM_DEBUG_DETAILED
-    printVectorElements(bubVec);
-#endif
-}
-
-// Insertion sort: Start from the top+1 element and insert it in the sorted
-// order in the list above it. Then take the top most + 2 element and insert in
-// the sorted order in the list above it. Continue doing this until you've
-// inserted the last element in the input list. You are basically picking up a
-// new element and inserting it in the sorted order. On how you find the
-// position to insert can be improved by various other search algorithms. The
-// below pgm does a linear search.
-void insertionSort(std::vector<int> & insVec)
-{
-   // Look until size-1 since in insertion sort we look 1+i
-   for (int i=0; i < insVec.size() - 1; i++)
+   for (int i=0, j =0; i <= max; i++)
    {
-      for (int j=i+1; j > 0 ; j--)
+      for (int k=0; k < valExists[i]; k++)
       {
-         if (insVec[j] < insVec[j-1])
-         {
-            std::swap(insVec[j], insVec[j-1]);
-         }
+         AiHaSortVec[j] = i;
+         j++;
       }
    }
-
-#ifdef PGM_DEBUG_DETAILED
-    printVectorElements(insVec);
-#endif
-}
-
-int quickSortPartitionAndReorder(std::vector<int> &qv, int left, int right)
-{
-   // this can be any element, let's just pick the middle position
-   int pivot = (left+right)/2;
-   int pivotVal = qv[pivot];
-
-   while (left <= right)
-   {
-      // Find the element on the left side that is greater than pivotVal
-      while(qv[left] < pivotVal)
-      {
-         left++;
-      }
-
-      // Find the element on the right side that is smaller than pivotVal
-      while(qv[right] > pivotVal)
-      {
-         right--;
-      }
-
-      // Now swap the left element with the right element
-      if (left <= right)
-      {
-         std::swap(qv[left], qv[right]);
-         left++;
-         right--;
-      }
-   }
-   return left;
-
-}
-
-// Quick sort: Pick a random element (pivot) in the list and partition the
-// list, reorder the array so that all elements less than pivot come to the
-// left of pivot and all elements greater than the pivot come to the right of
-// pivot. Recursively apply the same logic to the sub-arrays of elements on the
-// left and to the sub-array of elements to the right.
-void quickSort(std::vector<int> &quickVector, int left, int right)
-{
-   int pivot = quickSortPartitionAndReorder(quickVector, left, right);
-   
-   if (left < pivot -1)
-   {
-      // Sort elements on the left of the pivot
-      quickSort(quickVector, left, pivot-1 );
-   }
-
-   if (pivot < right)
-   {
-      // sort elements on the right of the pivot
-      quickSort(quickVector, pivot, right);
-   }
-
-#ifdef PGM_DEBUG_DETAILED
-    printVectorElements(quickVector);
-#endif
-}
-
-void merge(std::vector<int> &mVec, std::vector<int> &tempVec, int start, int
-      middle, int end)
-{
-   // First copy all the vector elements to the temp vector since we will be
-   // overwriting the mVec with sorted elements.
-   for (int i = start; i <= end; i++)
-   {
-      tempVec[i] = mVec[i];
-   }
-
-   int mVecCurrent = start;
-   int leftHalfStart = start;
-   int rightHalfStart = middle +1;
-
-   while (leftHalfStart <= middle && rightHalfStart <= end)
-   {
-      if (tempVec[leftHalfStart] <= tempVec[rightHalfStart])
-      {
-         mVec[mVecCurrent] = tempVec[leftHalfStart];
-         leftHalfStart++;
-      }
-      else
-      {
-         mVec[mVecCurrent] = tempVec[rightHalfStart];
-         rightHalfStart++;
-      }
-
-      mVecCurrent++;
-   }
-
-   int remLeft = middle - leftHalfStart;
-
-   while (remLeft >= 0 )
-   {
-      mVec[mVecCurrent] = tempVec[leftHalfStart];
-      mVecCurrent++;
-      leftHalfStart++;
-      remLeft--;
-   }
-}
-
-void mergeSortElements(std::vector<int> &mVec, std::vector<int> &tempVec, int start, int end)
-{
-   if (start < end)
-   {
-      int middle = (start + end)/2;
-      // MergeSort the left half
-      mergeSortElements(mVec, tempVec, start, middle);
-      // MergeSort the right half
-      mergeSortElements(mVec, tempVec, middle + 1, end);
-      // Now merge these two halfs
-      merge(mVec, tempVec, start, middle, end);
-   }
-}
-
-// Merge sort: Divide the list of numbers into two halfs, sort each half and
-// merge them back together in sorted order. Each of the half recursively
-// applies the same sorting algorithm.
-void mergeSort(std::vector<int> &mergeVec)
-{
-   std::vector<int> tempVec(mergeVec.size());
-
-   mergeSortElements(mergeVec, tempVec, 0, mergeVec.size() - 1);
-
-#ifdef PGM_DEBUG_DETAILED
-    printVectorElements(mergeVec);
-#endif
 }
 
 void radixSort(std::vector<int> &radixSortVec) 
@@ -358,71 +213,216 @@ void radixSort(std::vector<int> &radixSortVec)
    }
 }
 
-// AiHa sort (pronounced Aye-ha): Allocate a temporary structure from 0 to max
-// value in the input list. Walking from first element in the input list to
-// last element in the input list, increment the corresponding index counter
-// for each value in the input list. Next, go through this temporary structure
-// from 0th index to the max index, then write that index value into the output
-// array the number of times tracked by the counter.
-//
-// My own sorting algorithm, AiHa sort (pronounced Aye-ha)
-// Characteristics: 
-//   [a] Non comparison sort
-//   [b] Not a stable sort since the relative ordering of duplicate elements
-//       is not preserved.
-//   [c] Not an in-place sort as it uses additional vector to store meta data
-//   [d] Time complexity is O(n) , max runtime is 3n + time for memory allocations for the temporary vector.
-//   [e] A counting sort that is suited for an array of integer numbers.
-void AiHaSort(std::vector<int> &AiHaSortVec)
+void merge(std::vector<int> &mVec, std::vector<int> &tempVec, int start, int
+      middle, int end)
 {
-   int max = 0;
-
-   // TODO: Improvement: You can also gather the min and only allocate a vector
-   // of pairs of the size of (max - min). This way if the min and max are far
-   // apart, we can save ourself from the unnecessary long vector allocation.
-   //
-   // Find the max
-   for (int i=0; i < AiHaSortVec.size(); i++)
+   // First copy all the vector elements to the temp vector since we will be
+   // overwriting the mVec with sorted elements.
+   for (int i = start; i <= end; i++)
    {
-      if (AiHaSortVec[i] > max)
+      tempVec[i] = mVec[i];
+   }
+
+   int mVecCurrent = start;
+   int leftHalfStart = start;
+   int rightHalfStart = middle +1;
+
+   while (leftHalfStart <= middle && rightHalfStart <= end)
+   {
+      if (tempVec[leftHalfStart] <= tempVec[rightHalfStart])
       {
-         max = AiHaSortVec[i];
+         mVec[mVecCurrent] = tempVec[leftHalfStart];
+         leftHalfStart++;
+      }
+      else
+      {
+         mVec[mVecCurrent] = tempVec[rightHalfStart];
+         rightHalfStart++;
+      }
+
+      mVecCurrent++;
+   }
+
+   int remLeft = middle - leftHalfStart;
+
+   while (remLeft >= 0 )
+   {
+      mVec[mVecCurrent] = tempVec[leftHalfStart];
+      mVecCurrent++;
+      leftHalfStart++;
+      remLeft--;
+   }
+}
+
+void mergeSortElements(std::vector<int> &mVec, std::vector<int> &tempVec, int start, int end)
+{
+   if (start < end)
+   {
+      int middle = (start + end)/2;
+      // MergeSort the left half
+      mergeSortElements(mVec, tempVec, start, middle);
+      // MergeSort the right half
+      mergeSortElements(mVec, tempVec, middle + 1, end);
+      // Now merge these two halfs
+      merge(mVec, tempVec, start, middle, end);
+   }
+}
+
+// Merge sort: Divide the list of numbers into two halfs, sort each half and
+// merge them back together in sorted order. Each of the half recursively
+// applies the same sorting algorithm.
+void mergeSort(std::vector<int> &mergeVec)
+{
+   std::vector<int> tempVec(mergeVec.size());
+
+   mergeSortElements(mergeVec, tempVec, 0, mergeVec.size() - 1);
+
+#ifdef PGM_DEBUG_DETAILED
+    printVectorElements(mergeVec);
+#endif
+}
+
+int quickSortPartitionAndReorder(std::vector<int> &qv, int left, int right)
+{
+   // this can be any element, let's just pick the middle position
+   int pivot = (left+right)/2;
+   int pivotVal = qv[pivot];
+
+   while (left <= right)
+   {
+      // Find the element on the left side that is greater than pivotVal
+      while(qv[left] < pivotVal)
+      {
+         left++;
+      }
+
+      // Find the element on the right side that is smaller than pivotVal
+      while(qv[right] > pivotVal)
+      {
+         right--;
+      }
+
+      // Now swap the left element with the right element
+      if (left <= right)
+      {
+         std::swap(qv[left], qv[right]);
+         left++;
+         right--;
+      }
+   }
+   return left;
+
+}
+
+// Quick sort: Pick a random element (pivot) in the list and partition the
+// list, reorder the array so that all elements less than pivot come to the
+// left of pivot and all elements greater than the pivot come to the right of
+// pivot. Recursively apply the same logic to the sub-arrays of elements on the
+// left and to the sub-array of elements to the right.
+void quickSort(std::vector<int> &quickVector, int left, int right)
+{
+   int pivot = quickSortPartitionAndReorder(quickVector, left, right);
+   
+   if (left < pivot -1)
+   {
+      // Sort elements on the left of the pivot
+      quickSort(quickVector, left, pivot-1 );
+   }
+
+   if (pivot < right)
+   {
+      // sort elements on the right of the pivot
+      quickSort(quickVector, pivot, right);
+   }
+
+#ifdef PGM_DEBUG_DETAILED
+    printVectorElements(quickVector);
+#endif
+}
+
+// Insertion sort: Start from the top+1 element and insert it in the sorted
+// order in the list above it. Then take the top most + 2 element and insert in
+// the sorted order in the list above it. Continue doing this until you've
+// inserted the last element in the input list. You are basically picking up a
+// new element and inserting it in the sorted order. On how you find the
+// position to insert can be improved by various other search algorithms. The
+// below pgm does a linear search.
+void insertionSort(std::vector<int> & insVec)
+{
+   // Look until size-1 since in insertion sort we look 1+i
+   for (int i=0; i < insVec.size() - 1; i++)
+   {
+      for (int j=i+1; j > 0 ; j--)
+      {
+         if (insVec[j] < insVec[j-1])
+         {
+            std::swap(insVec[j], insVec[j-1]);
+         }
       }
    }
 
-   // Initialize all to false.
-   //
-   // After testing with std::vector and std:valarray, performance seems to be
-   // better when valarray is used. Reading on the web, valarray seems to be
-   // intended for optimized performance for some vectorized processing of
-   // arrays (like done in FORTRAN) which never happened.
-   //
-   // std::vector<int> valExists(max+1, 0);
-   //
-   // valarray constructor takes in arguments in a different order compared to
-   // std::vector, bit odd.
-   // valarray (const T& val, size_t n);
-   std::valarray<int> valExists(0, max+1);
+#ifdef PGM_DEBUG_DETAILED
+    printVectorElements(insVec);
+#endif
+}
 
-   // Test performance using dynarray, the memory
-   // http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3662.html
-   // std::dynarray<int> valExists(max+1, 0);
+// Selection sort: Find the smallest element using a linear scan and move it to
+// the front. Then find the second smallest and move to the second position.
+// Continue doing this until the entire list is sorted.
+// Runtime: O(n^2).
+void selectionSort(std::vector<int> &selVec)
+{
+   int min;
+   int minPos;
 
-   for (int i=0; i <= AiHaSortVec.size() - 1; i++)
+   for (int i=0; i < selVec.size(); i++)
    {
-      //valExists[AiHaSortVec[i]].first = true;
-      // Keep a count of duplicates
-      valExists[AiHaSortVec[i]]++;
+      min = selVec[i];
+      minPos = i;
+
+      for (int j=i+1; j < selVec.size(); j++)
+      {
+         if (selVec[minPos]  > selVec[j])
+         {
+            minPos = j;
+         }
+      }
+
+      std::swap(selVec[i], selVec[minPos]);
    }
 
-   for (int i=0, j =0; i <= max; i++)
+#ifdef PGM_DEBUG_DETAILED
+    printVectorElements(bubVec);
+#endif
+}
+
+// Bubble sort: Start at the beginning of the array, compare the first two
+// elements and swap based on the comparison performed. Then move to the next
+// pair of elements, compare and swap as necessary. Continue doing this until
+// the entire array is sorted. 
+// Runtime: O(n^2).
+void bubbleSort(std::vector<int> &bubVec)
+{
+
+#ifdef PGM_DEBUG_DETAILED
+   cout << "\nIn Bubble sort: " << endl;
+   printVectorElements(bubVec);
+#endif
+
+   for (int i=0; i < bubVec.size(); i++)
    {
-      for (int k=0; k < valExists[i]; k++)
+      for (int j=1; j < bubVec.size() - i; j++)
       {
-         AiHaSortVec[j] = i;
-         j++;
+         if (bubVec[j-1] > bubVec[j])
+         {
+            std::swap(bubVec[j-1], bubVec[j]);
+         }
       }
    }
+
+#ifdef PGM_DEBUG_DETAILED
+    printVectorElements(bubVec);
+#endif
 }
 
 int main(int argc, char* argv[])
