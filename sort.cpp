@@ -83,6 +83,8 @@ bool testSort(std::vector<int> const &vec1, std::vector<int> const &vec2)
 // for each value in the input list. Next, go through this temporary structure
 // from 0th index to the max index, then write that index value into the output
 // array the number of times tracked by the counter.
+// Runtime: O(n)
+// Memory: O(n)
 //
 // My own sorting algorithm, AiHa sort (pronounced Aye-ha)
 // Characteristics: 
@@ -90,10 +92,17 @@ bool testSort(std::vector<int> const &vec1, std::vector<int> const &vec2)
 //   [b] Not a stable sort since the relative ordering of duplicate elements
 //       is not preserved.
 //   [c] Not an in-place sort as it uses additional vector to store meta data
-//   [d] Time complexity is O(n) , max runtime is 3n + time for memory allocations for the temporary vector.
-//   [e] A counting sort that is suited for an array of integer numbers.
+//   [d] Time complexity is O(n), max runtime is 3n + time for memory
+//   allocations for the temporary vector.  
+//   [e] A counting sort that is suited
+//   for an array of integer numbers.
+//   [f] Memory: O(n)
 void AiHaSort(std::vector<int> &AiHaSortVec)
 {
+#ifdef PGM_DEBUG_DETAILED
+    cout << "\nEntering AiHa sort: \n" ;
+#endif
+
    int max = 0;
 
    // TODO: Improvement: You can also gather the min and only allocate a vector
@@ -129,7 +138,6 @@ void AiHaSort(std::vector<int> &AiHaSortVec)
 
    for (int i=0; i <= AiHaSortVec.size() - 1; i++)
    {
-      //valExists[AiHaSortVec[i]].first = true;
       // Keep a count of duplicates
       valExists[AiHaSortVec[i]]++;
    }
@@ -142,10 +150,109 @@ void AiHaSort(std::vector<int> &AiHaSortVec)
          j++;
       }
    }
+
+#ifdef PGM_DEBUG_DETAILED
+    cout << "\nExiting AiHa sort: \n" ;
+#endif
 }
 
+// Counting sort: Count the number of objects that have each distinct key
+// values, use arithmetic on those counts to determine the positions of each
+// key value in the output sequence
+// Runtime: O(n)
+// Memory: O(n + range)
+void countingSort(std::vector<int> &countingSortVec) 
+{
+#ifdef PGM_DEBUG_DETAILED
+         cout << "\nEntering countingSort: \n" ;
+#endif
+
+   int max = 0;
+   int inputSize = countingSortVec.size();
+
+   // Find the max
+   for (int i=0; i < inputSize; i++)
+   {
+      if (countingSortVec[i] > max)
+      {
+         max = countingSortVec[i];
+      }
+   }
+
+   // Initialize all to false.
+   //
+   // After testing with std::vector and std:valarray, performance seems to be
+   // better when valarray is used. Reading on the web, valarray seems to be
+   // intended for optimized performance for some vectorized processing of
+   // arrays (like done in FORTRAN) which never happened.
+   //
+   // std::vector<int> valExists(max+1, 0);
+   //
+   // valarray constructor takes in arguments in a different order compared to
+   // std::vector, bit odd.
+   // valarray (const T& val, size_t n);
+   std::valarray<int> valExists(0, max+1);
+
+   // Test performance using dynarray, the memory
+   // http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3662.html
+   // std::dynarray<int> valExists(max+1, 0);
+
+   // Calculate the histogram of key frequencies
+   for (int i=0; i < inputSize; i++)
+   {
+      valExists[countingSortVec[i]]++;
+   }
+
+   // Calculate the starting index for each key
+   for (int i=1; i <= max; i++)
+   {
+      valExists[i] += valExists[i-1];
+   }
+
+   std::vector<int> tempVec(inputSize, 0);
+
+   // Copy the integer to temp array, preserving order of inputs with equal
+   // values
+   for (int i = inputSize -1; i >= 0; i--)
+   {
+      // Index is 0 based, count is 1 based
+      valExists[countingSortVec[i]]--;
+      tempVec[valExists[countingSortVec[i]]] = countingSortVec[i];
+
+#ifdef PGM_DEBUG_DETAILED
+      cout << "Iterating in For Loop\n" ;
+      printVectorElements(tempVec);
+#endif
+   }
+
+#ifdef PGM_DEBUG_DETAILED
+   cout << "Out of For Loop\n" ;
+#endif
+
+   // Copy the tempVec to input Vec
+   for (int i = 0; i < inputSize; i++)
+   {
+      countingSortVec[i] = tempVec[i];
+   }
+
+#ifdef PGM_DEBUG_DETAILED
+    cout << "Iterating in While Loop\n" ;
+    printVectorElements(countingSortVec);
+    cout << "\nExiting countingSort: \n" ;
+#endif
+}
+
+// Radix sort: Iterate through each k'th digit(k being the same signigicant
+// position, starting from pos 0) grouping numbers by each digit. I have
+// used counting sort to sort the numbers at each position.
+// Runtime: O(nk) (k: number of digits in the max key)
+// Memory: O(n)
 void radixSort(std::vector<int> &radixSortVec) 
 {
+#ifdef PGM_DEBUG_DETAILED
+         cout << "\nEntering Radix sort: \n" ;
+#endif
+
    int max = 0;
    int inputSize = radixSortVec.size();
 
@@ -211,6 +318,10 @@ void radixSort(std::vector<int> &radixSortVec)
 
       digitPos *= 10;
    }
+
+#ifdef PGM_DEBUG_DETAILED
+         cout << "\nExiting Radix sort: \n" ;
+#endif
 }
 
 void merge(std::vector<int> &mVec, std::vector<int> &tempVec, int start, int
@@ -271,6 +382,8 @@ void mergeSortElements(std::vector<int> &mVec, std::vector<int> &tempVec, int st
 // Merge sort: Divide the list of numbers into two halfs, sort each half and
 // merge them back together in sorted order. Each of the half recursively
 // applies the same sorting algorithm.
+// Runtime: O(n log n)
+// Memory:  O(n)
 void mergeSort(std::vector<int> &mergeVec)
 {
    std::vector<int> tempVec(mergeVec.size());
@@ -319,6 +432,8 @@ int quickSortPartitionAndReorder(std::vector<int> &qv, int left, int right)
 // left of pivot and all elements greater than the pivot come to the right of
 // pivot. Recursively apply the same logic to the sub-arrays of elements on the
 // left and to the sub-array of elements to the right.
+// Runtime: Average case - O(n log n) , Worst case - O(n^2)
+// Memory: O(1)
 void quickSort(std::vector<int> &quickVector, int left, int right)
 {
    int pivot = quickSortPartitionAndReorder(quickVector, left, right);
@@ -347,6 +462,8 @@ void quickSort(std::vector<int> &quickVector, int left, int right)
 // new element and inserting it in the sorted order. On how you find the
 // position to insert can be improved by various other search algorithms. The
 // below pgm does a linear search.
+// Runtime: O(n^2)
+// Memory: O(1)
 void insertionSort(std::vector<int> & insVec)
 {
    // Look until size-1 since in insertion sort we look 1+i
@@ -369,7 +486,8 @@ void insertionSort(std::vector<int> & insVec)
 // Selection sort: Find the smallest element using a linear scan and move it to
 // the front. Then find the second smallest and move to the second position.
 // Continue doing this until the entire list is sorted.
-// Runtime: O(n^2).
+// Runtime: O(n^2)
+// Memory:: O(1)
 void selectionSort(std::vector<int> &selVec)
 {
    int min;
@@ -392,7 +510,7 @@ void selectionSort(std::vector<int> &selVec)
    }
 
 #ifdef PGM_DEBUG_DETAILED
-    printVectorElements(bubVec);
+    printVectorElements(selVec);
 #endif
 }
 
@@ -400,7 +518,8 @@ void selectionSort(std::vector<int> &selVec)
 // elements and swap based on the comparison performed. Then move to the next
 // pair of elements, compare and swap as necessary. Continue doing this until
 // the entire array is sorted. 
-// Runtime: O(n^2).
+// Runtime: O(n^2)
+// Memory:: O(1)
 void bubbleSort(std::vector<int> &bubVec)
 {
 
@@ -506,8 +625,11 @@ int main(int argc, char* argv[])
    //   [b] Not a stable sort since the relative ordering of duplicate elements
    //       is not preserved.
    //   [c] Not an in-place sort as it uses additional vector to store meta data
-   //   [d] Time complexity is O(n) , max runtime is 3n + time for memory allocations for the temporary vector.
-   //   [e] A counting sort that is suited for an array of integer numbers.
+   //   [d] Time complexity is O(n) , max runtime is 3n + time for memory
+   //   allocations for the temporary vector.
+   //   [e] A counting sort that is
+   //   suited for an array of integer numbers.
+   //   [f] Memory: O(n)
    std::vector<int> AiHaSortVector(inList);
    timeStart = clock();
    AiHaSort(AiHaSortVector);
@@ -518,6 +640,21 @@ int main(int argc, char* argv[])
       cout << "\nAiHa Sort sorted incorrectly" << endl;
 #ifdef PGM_DEBUG
       printVectorElements(AiHaSortVector);
+#endif
+      testStatus = false;
+   }
+
+   // Counting sort
+   std::vector<int> countingSortVector(inList);
+   timeStart = clock();
+   countingSort(countingSortVector);
+   timeEnd = clock();
+   cout << "\nTime taken by counting Sort: " << timeEnd - timeStart << " clicks,  " << (timeEnd - timeStart)*1.0/CLOCKS_PER_SEC << " seconds" << endl;
+   if (!testSort(stdsortVector,countingSortVector))
+   {
+      cout << "\ncounting Sort sorted incorrectly" << endl;
+#ifdef PGM_DEBUG
+      printVectorElements(countingSortVector);
 #endif
       testStatus = false;
    }
@@ -614,8 +751,6 @@ int main(int argc, char* argv[])
 
 
    // Heap sort
-
-   // Counting sort
 
    // Timsort
 
