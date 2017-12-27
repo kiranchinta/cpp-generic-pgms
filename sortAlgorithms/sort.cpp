@@ -28,10 +28,10 @@ namespace
 void printUsage(char* pgmName)
 {
       cout << "Input: A file containing a list of integers OR a list of integers separated by space" << endl;
-      cout << "This program sorts the list of integers using the below sort algorithms and prints the time taken for each sort algorithm" << endl;
-      cout << "  std::sort\n  BubbleSort\n  SelectionSort\n  InsertionSort\n  QuickSort\n  MergeSort\n  RadixSort" << endl;
-      cout << "Usage 1: " << pgmName << " list_of_integers_(minimum_two_integers)" << endl;
-      cout << "Usage 2: " << pgmName << " $fileName_containing_list_of_integers_1perRow" << endl;
+      cout << "This program sorts a list of integers using the below sort algorithms and prints the time taken for each sort algorithm" << endl;
+      cout << " std::sort\n AiHaSort\n RadixSort\n MergeSort\n QuickSort\n InsertionSort\n SelectionSort\n BubbleSort\n" << endl;
+      cout << "Usage 1: " << pgmName << " list_of_integers_(minimum_two_integers)  (example: " << pgmName << " 10 9 8 7)" << endl;
+      cout << "Usage 2: " << pgmName << " $fileName_containing_list_of_integers_1perRow (example: " << pgmName << " file1)" << endl;
 }
 
 void signalHandler(int signal)
