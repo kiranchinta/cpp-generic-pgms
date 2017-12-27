@@ -27,7 +27,7 @@ namespace
 
 void printUsage(char* pgmName)
 {
-      cout << "Input: A file containing a list of integers OR a list of integers separated by space" << endl;
+      cout << "Input: A file containing a list of integers OR a list of integers separated by space\n" << endl;
       cout << "This program sorts a list of integers using the below sort algorithms and prints the time taken for each sort algorithm" << endl;
       cout << " std::sort\n AiHaSort\n RadixSort\n MergeSort\n QuickSort\n InsertionSort\n SelectionSort\n BubbleSort\n" << endl;
       cout << "Usage 1: " << pgmName << " list_of_integers_(minimum_two_integers)  (example: " << pgmName << " 10 9 8 7)" << endl;
@@ -580,6 +580,7 @@ int main(int argc, char* argv[])
       }
       else
       {
+         cout << "\nFile " << argv[1] << " does not exist\n" << endl;
          printUsage(argv[0]);
          return 0;
       }
