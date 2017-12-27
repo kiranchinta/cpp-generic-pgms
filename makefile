@@ -4,7 +4,7 @@
 
 CXX=g++
 
-binaries = bitpostodec bitpos powerof2 printTwosComplement sort
+binaries = bitpostodec bitpos powerof2 printTwosComplement sortAlgorithms/sort
 all: $(binaries)
 
 bitpostodec: bitpostodec.cpp 
@@ -21,8 +21,8 @@ printTwosComplement: printTwosComplement.cpp
 
 # Extra compile options to get the symbol info for stacktrace dumping
 # $(CXX) -g -std=c++1y -rdynamic -o sort sort.cpp // For dynarray compilation
-sort: sort.cpp
-	$(CXX) -g -rdynamic -o sort sort.cpp
+sort: sortAlgorithms/sort.cpp
+	$(CXX) -g -rdynamic -o sortAlgorithms/sort sortAlgorithms/sort.cpp
 
 clean:
 	rm $(binaries)
