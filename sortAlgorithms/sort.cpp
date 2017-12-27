@@ -578,6 +578,11 @@ int main(int argc, char* argv[])
             arraySize++;
          }
       }
+      else
+      {
+         printUsage(argv[0]);
+         return 0;
+      }
    }
    else
    {
