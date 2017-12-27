@@ -1,4 +1,4 @@
-# SRCS=bitpostodec.cpp bitpos.cpp powerof2.cpp printTwosComplement.cpp sort.cpp
+# SRCS=bitpostodec.cpp bitpos.cpp powerof2.cpp printTwosComplement.cpp sortAlgorithms/sort.cpp
 # Replace .cpp in SRCS with .o
 # OBJS=$(subst .cpp,.o,$(SRCS))
 
