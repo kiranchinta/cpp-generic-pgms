@@ -462,7 +462,7 @@ void quickSort(std::vector<int> &quickVector, int left, int right)
 void maxHeapify(std::vector<int> &heapVector, int rootNodePos, int heapSize)
 {
 #ifdef PGM_DEBUG_DETAILED
-         cout << "\nEntering maxHeapify: \n" ;
+   cout << "\nEntering maxHeapify: \n" ;
 #endif
 
    // For a 0 based heap, 
@@ -497,22 +497,23 @@ void maxHeapify(std::vector<int> &heapVector, int rootNodePos, int heapSize)
 #endif
 
       // Recursively traverse down the heap until the rest of the heap is
-      // heapified TODO: Optimization, we can benefit by only heapifying the part
-      // of the tree that got impacted (see swap operation above), the other part
-      // of the tree should be OK
+      // heapified 
       maxHeapify(heapVector, maxIndex, heapSize);
    }
 
 #ifdef PGM_DEBUG_DETAILED
-         cout << "\nExiting maxHeapify: \n" ;
+      cout << "\nExiting maxHeapify: \n" ;
 #endif
 }
 
-// Heap sort
+// Heap sort: Heap sort is done in two phases
+// Phase 1: Build a max heap from the input list
+// Phase 2: Swap the root node (max) with the right most leaf node and heapify
+// the reduced heap. Do this recursively
 void heapSort(std::vector<int> &heapVector)
 {
 #ifdef PGM_DEBUG_DETAILED
-         cout << "\nEntering Heap sort: \n" ;
+   cout << "\nEntering Heap sort: \n" ;
 #endif
 
    int numElements = heapVector.size();
@@ -521,12 +522,12 @@ void heapSort(std::vector<int> &heapVector)
    int rootNode = 0;
    int rootIndexForHeapify = 0;
 
-   // Phase 1:
-   // Construct a max heap (in-place). In a max heap, the max number is at the
-   // root node (node 0) and each node is greater than or equal to it's
-   // children. We will start with the right most node on level-1 and traverse
-   // back from them (bottom up, bubbling up the max values to the top) to
-   // complete constructing the max heap The right most node on level-1 is
+   // Phase 1: Construct a max heap (in-place). In a max heap, the max number
+   // is at the root node (node 0) and each node is greater than or equal to
+   // it's children. We will start with the right most node on level-1 (we
+   // don't need to worry about leaf nodes here) and traverse back from them
+   // (bottom up, bubbling up the larger values to the top) to complete
+   // constructing the max heap. The right most node on level-1 is
    // (numElements/2 -1) for the heap starting with index 0
 
    // For phase 1, we heapify the entire heap
@@ -549,10 +550,9 @@ void heapSort(std::vector<int> &heapVector)
    // Reset the rootIndexForHeapify back to the root node
    rootIndexForHeapify = rootNode;
 
-   // Phase 2:
-   // Now given that the max is at the root (node 0), swap it at with the last
-   // element(right most leaf node in the tree) and maxHeapify the rest of the
-   // tree, continue doing this until you reach the root node
+   // Phase 2: Now given that the max is at the root (node 0), swap it at with
+   // the last element(right most leaf node in the tree) and maxHeapify the
+   // rest of the tree, continue doing this until you reach the root node
    for (heapSize=numElements -1; heapSize > 0; heapSize--)
    {
       // Swap the number at root node with the right most leaf node
@@ -569,7 +569,7 @@ void heapSort(std::vector<int> &heapVector)
    }
 
 #ifdef PGM_DEBUG_DETAILED
-         cout << "\nExiting Heap sort: \n" ;
+   cout << "\nExiting Heap sort: \n" ;
 #endif
 }
 
