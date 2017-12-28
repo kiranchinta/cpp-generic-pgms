@@ -17,8 +17,8 @@
 using namespace std;
 
 // For debug purpose
-// #define PGM_DEBUG_DETAILED 1
-// #define PGM_DEBUG 1
+//  #define PGM_DEBUG_DETAILED 1
+//  #define PGM_DEBUG 1
 
 namespace
 {
@@ -97,6 +97,10 @@ bool testSort(std::vector<int> const &vec1, std::vector<int> const &vec2)
 //   [e] A counting sort that is suited
 //   for an array of integer numbers.
 //   [f] Memory: O(n)
+//
+// Useful Applications:
+//   [a] A single integer column is selected with a order by clause
+//   [b] To sort some random data in test scenarios
 void AiHaSort(std::vector<int> &AiHaSortVec)
 {
 #ifdef PGM_DEBUG_DETAILED
@@ -455,6 +459,120 @@ void quickSort(std::vector<int> &quickVector, int left, int right)
 #endif
 }
 
+void maxHeapify(std::vector<int> &heapVector, int rootNodePos, int heapSize)
+{
+#ifdef PGM_DEBUG_DETAILED
+         cout << "\nEntering maxHeapify: \n" ;
+#endif
+
+   // For a 0 based heap, 
+   // left child is 2*rootNodePos + 1
+   int lChildIdx = 2*rootNodePos + 1;
+   // right child is 2*rootNodePos + 2
+   int rChildIdx = 2*rootNodePos + 2;
+   // We will need to note that max index of the three (root, left child, right
+   // child) to recursively heapify the modified sub heap
+   int maxIndex = rootNodePos;
+
+   if (   lChildIdx < heapSize
+       && heapVector[maxIndex] < heapVector[lChildIdx])
+   {
+      maxIndex = lChildIdx;
+   }
+
+   if (   rChildIdx < heapSize
+       && heapVector[maxIndex] < heapVector[rChildIdx])
+   {
+      maxIndex = rChildIdx;
+   }
+
+   // If the heap is not already max heap, then swap as needed and heapify the
+   // subtree that is modified due to swap
+   if (maxIndex != rootNodePos)
+   {
+      std::swap(heapVector[rootNodePos],heapVector[maxIndex]);
+
+#ifdef PGM_DEBUG_DETAILED
+      printVectorElements(heapVector);
+#endif
+
+      // Recursively traverse down the heap until the rest of the heap is
+      // heapified TODO: Optimization, we can benefit by only heapifying the part
+      // of the tree that got impacted (see swap operation above), the other part
+      // of the tree should be OK
+      maxHeapify(heapVector, maxIndex, heapSize);
+   }
+
+#ifdef PGM_DEBUG_DETAILED
+         cout << "\nExiting maxHeapify: \n" ;
+#endif
+}
+
+// Heap sort
+void heapSort(std::vector<int> &heapVector)
+{
+#ifdef PGM_DEBUG_DETAILED
+         cout << "\nEntering Heap sort: \n" ;
+#endif
+
+   int numElements = heapVector.size();
+
+   // This is a 0 based heap
+   int rootNode = 0;
+   int rootIndexForHeapify = 0;
+
+   // Phase 1:
+   // Construct a max heap (in-place). In a max heap, the max number is at the
+   // root node (node 0) and each node is greater than or equal to it's
+   // children. We will start with the right most node on level-1 and traverse
+   // back from them (bottom up, bubbling up the max values to the top) to
+   // complete constructing the max heap The right most node on level-1 is
+   // (numElements/2 -1) for the heap starting with index 0
+
+   // For phase 1, we heapify the entire heap
+   int heapSize = numElements;
+
+   for (rootIndexForHeapify=(heapSize/2)-1; rootIndexForHeapify >= 0; rootIndexForHeapify--)
+   {
+      maxHeapify(heapVector, rootIndexForHeapify, heapSize);
+#ifdef PGM_DEBUG_DETAILED
+      cout << "\n In heapSort Phase1 loop" << endl;
+      printVectorElements(heapVector);
+#endif
+   }
+
+#ifdef PGM_DEBUG_DETAILED
+      cout << "\n heapSort Phase1 done" << endl;
+      printVectorElements(heapVector);
+#endif
+
+   // Reset the rootIndexForHeapify back to the root node
+   rootIndexForHeapify = rootNode;
+
+   // Phase 2:
+   // Now given that the max is at the root (node 0), swap it at with the last
+   // element(right most leaf node in the tree) and maxHeapify the rest of the
+   // tree, continue doing this until you reach the root node
+   for (heapSize=numElements -1; heapSize > 0; heapSize--)
+   {
+      // Swap the number at root node with the right most leaf node
+      std::swap(heapVector[rootNode], heapVector[heapSize]);
+
+#ifdef PGM_DEBUG_DETAILED
+      cout << "\n In heapSort Phase2 loop" << endl;
+      printVectorElements(heapVector);
+#endif
+
+      // After the above swap, the tree is no more a max heap. Heapify the
+      // remaining tree
+      maxHeapify(heapVector, rootNode, heapSize);
+   }
+
+#ifdef PGM_DEBUG_DETAILED
+         cout << "\nExiting Heap sort: \n" ;
+#endif
+}
+
 // Insertion sort: Start from the top+1 element and insert it in the sorted
 // order in the list above it. Then take the top most + 2 element and insert in
 // the sorted order in the list above it. Continue doing this until you've
@@ -615,7 +733,7 @@ int main(int argc, char* argv[])
    // the inList array to a stdsortVector since std::sort sorts the elements
    // inline
    std::vector<int> stdsortVector(inList);
-   cout << "clocks ticks per second: " << CLOCKS_PER_SEC << endl;
+   cout << "clock ticks per second: " << CLOCKS_PER_SEC << endl;
    timeStart = clock();
    std::sort(stdsortVector.begin(), stdsortVector.end());
    timeEnd = clock();
@@ -710,6 +828,21 @@ int main(int argc, char* argv[])
       testStatus = false;
    }
 
+   // Heap sort
+   std::vector<int> heapVector(inList);
+   timeStart = clock();
+   heapSort(heapVector);
+   timeEnd = clock();
+   cout << "\nTime taken by Heap Sort: " << timeEnd - timeStart << " clicks,  " << (timeEnd - timeStart)*1.0/CLOCKS_PER_SEC << " seconds" << endl;
+   if (!testSort(stdsortVector,heapVector))
+   {
+      cout << "\nHeap Sort sorted incorrectly" << endl;
+#ifdef PGM_DEBUG
+      printVectorElements(heapVector);
+#endif
+      testStatus = false;
+   }
+
    // Insertion sort
    std::vector<int> insVector(inList);
    timeStart = clock();
@@ -755,8 +888,6 @@ int main(int argc, char* argv[])
       testStatus = false;
    }
 
-
-   // Heap sort
 
    // Timsort
 
