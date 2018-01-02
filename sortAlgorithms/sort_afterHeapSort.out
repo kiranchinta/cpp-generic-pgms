@@ -1,0 +1,166 @@
+For Data sortData/intnum_1000
+clock ticks per second: 1000000
+
+Time taken by std::sort: 8 clicks,  8e-06 seconds
+
+Time taken by AiHa Sort: 30 clicks,  3e-05 seconds
+
+Time taken by counting Sort: 55 clicks,  5.5e-05 seconds
+
+Time taken by Radix Sort: 208 clicks,  0.000208 seconds
+
+Time taken by Merge Sort: 146 clicks,  0.000146 seconds
+
+Time taken by Quick Sort: 51 clicks,  5.1e-05 seconds
+
+Time taken by Heap Sort: 199 clicks,  0.000199 seconds
+
+Time taken by Insertion Sort: 4431 clicks,  0.004431 seconds
+
+Time taken by Selection Sort: 1823 clicks,  0.001823 seconds
+
+Time taken by Bubble Sort: 4281 clicks,  0.004281 seconds
+
+
+ Test Passed
+ 
+
+For Data sortData/intnum_10000
+clock ticks per second: 1000000
+
+Time taken by std::sort: 26 clicks,  2.6e-05 seconds
+
+Time taken by AiHa Sort: 253 clicks,  0.000253 seconds
+
+Time taken by counting Sort: 498 clicks,  0.000498 seconds
+
+Time taken by Radix Sort: 2423 clicks,  0.002423 seconds
+
+Time taken by Merge Sort: 1377 clicks,  0.001377 seconds
+
+Time taken by Quick Sort: 466 clicks,  0.000466 seconds
+
+Time taken by Heap Sort: 1953 clicks,  0.001953 seconds
+
+Time taken by Insertion Sort: 399864 clicks,  0.399864 seconds
+
+Time taken by Selection Sort: 210105 clicks,  0.210105 seconds
+
+Time taken by Bubble Sort: 490950 clicks,  0.49095 seconds
+
+
+ Test Passed
+ 
+
+For Data sortData/intnum_100T
+clock ticks per second: 1000000
+
+Time taken by std::sort: 157 clicks,  0.000157 seconds
+
+Time taken by AiHa Sort: 2007 clicks,  0.002007 seconds
+
+Time taken by counting Sort: 4302 clicks,  0.004302 seconds
+
+Time taken by Radix Sort: 24704 clicks,  0.024704 seconds
+
+Time taken by Merge Sort: 15843 clicks,  0.015843 seconds
+
+Time taken by Quick Sort: 5281 clicks,  0.005281 seconds
+
+Time taken by Heap Sort: 28272 clicks,  0.028272 seconds
+
+Time taken by Insertion Sort: 40672309 clicks,  40.6723 seconds
+
+Time taken by Selection Sort: 18066894 clicks,  18.0669 seconds
+
+Time taken by Bubble Sort: 44514954 clicks,  44.515 seconds
+
+
+ Test Passed
+
+For Data sortData/intnum_mil
+clock ticks per second: 1000000
+
+Time taken by std::sort: 1604 clicks,  0.001604 seconds
+
+Time taken by AiHa Sort: 25943 clicks,  0.025943 seconds
+
+Time taken by counting Sort: 41813 clicks,  0.041813 seconds
+
+Time taken by Radix Sort: 249152 clicks,  0.249152 seconds
+
+Time taken by Merge Sort: 185647 clicks,  0.185647 seconds
+
+Time taken by Quick Sort: 67168 clicks,  0.067168 seconds
+
+Time taken by Heap Sort: 315029 clicks,  0.315029 seconds
+
+For Data sortData/intnum_rand_1000
+clock ticks per second: 1000000
+
+Time taken by std::sort: 43 clicks,  4.3e-05 seconds
+
+Time taken by AiHa Sort: 8520 clicks,  0.00852 seconds
+
+Time taken by counting Sort: 9991 clicks,  0.009991 seconds
+
+Time taken by Radix Sort: 390 clicks,  0.00039 seconds
+
+Time taken by Merge Sort: 226 clicks,  0.000226 seconds
+
+Time taken by Quick Sort: 153 clicks,  0.000153 seconds
+
+Time taken by Heap Sort: 264 clicks,  0.000264 seconds
+
+Time taken by Insertion Sort: 3761 clicks,  0.003761 seconds
+
+Time taken by Selection Sort: 2325 clicks,  0.002325 seconds
+
+Time taken by Bubble Sort: 3977 clicks,  0.003977 seconds
+
+
+ Test Passed
+ 
+
+For Data sortData/intnum_rand_100T
+clock ticks per second: 1000000
+
+Time taken by std::sort: 2197 clicks,  0.002197 seconds
+
+Time taken by AiHa Sort: 1317 clicks,  0.001317 seconds
+
+Time taken by counting Sort: 4150 clicks,  0.00415 seconds
+
+Time taken by Radix Sort: 13549 clicks,  0.013549 seconds
+
+Time taken by Merge Sort: 21961 clicks,  0.021961 seconds
+
+Time taken by Quick Sort: 12060 clicks,  0.01206 seconds
+
+Time taken by Heap Sort: 30453 clicks,  0.030453 seconds
+
+Time taken by Insertion Sort: 28933563 clicks,  28.9336 seconds
+
+Time taken by Selection Sort: 18684582 clicks,  18.6846 seconds
+
+Time taken by Bubble Sort: 49233070 clicks,  49.2331 seconds
+
+
+ Test Passed
+ 
+For Data sortData/intnum_rand_1M
+clock ticks per second: 1000000
+
+Time taken by std::sort: 65121 clicks,  0.065121 seconds
+
+Time taken by AiHa Sort: 43670 clicks,  0.04367 seconds
+
+Time taken by counting Sort: 75069 clicks,  0.075069 seconds
+
+Time taken by Radix Sort: 239061 clicks,  0.239061 seconds
+
+Time taken by Merge Sort: 293788 clicks,  0.293788 seconds
+
+Time taken by Quick Sort: 191415 clicks,  0.191415 seconds
+
+Time taken by Heap Sort: 488947 clicks,  0.488947 seconds
