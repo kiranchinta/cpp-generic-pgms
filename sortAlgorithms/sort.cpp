@@ -29,7 +29,7 @@ void printUsage(char* pgmName)
 {
       cout << "Input: A file containing a list of integers OR a list of integers separated by space\n" << endl;
       cout << "This program sorts a list of integers using the below sort algorithms and prints the time taken for each sort algorithm" << endl;
-      cout << " std::sort\n AiHaSort\n RadixSort\n MergeSort\n QuickSort\n InsertionSort\n SelectionSort\n BubbleSort\n" << endl;
+      cout << " std::sort\n AiHaSort\n RadixSort\n MergeSort\n QuickSort\n HeapSort\n InsertionSort\n SelectionSort\n BubbleSort\n" << endl;
       cout << "Usage 1: " << pgmName << " list_of_integers_(minimum_two_integers)  (example: " << pgmName << " 10 9 8 7)" << endl;
       cout << "Usage 2: " << pgmName << " $fileName_containing_list_of_integers_1perRow (example: " << pgmName << " file1)" << endl;
 }
@@ -510,6 +510,8 @@ void maxHeapify(std::vector<int> &heapVector, int rootNodePos, int heapSize)
 // Phase 1: Build a max heap from the input list
 // Phase 2: Swap the root node (max) with the right most leaf node and heapify
 // the reduced heap. Do this recursively
+// Runtime: O(n log n)
+// Memory: O(1)
 void heapSort(std::vector<int> &heapVector)
 {
 #ifdef PGM_DEBUG_DETAILED
